@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar producto</title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+
+<body>
+    <h1>Agregar Productos al Inventario</h1>
+    <h3>Codo a Codo 2023</h3>
+
+    <form id="formulario" enctype="multipart/form-data">
+        <label for="codigo">Id:</label>
+        <input type="text" id="id" name="id" required><br>
+
+        <label for="descripcion">Descripción:</label>
+        <input type="text" id="descripcion" name="descripcion" required><br>
+
+        <label for="cantidad">Cantidad:</label>
+        <input type="number" id="cantidad" name="cantidad" required><br>
+
+        <label for="precio">Precio:</label>
+        <input type="number" step="0.01" id="precio" name="precio" required><br>
+
+        <label for="imagenProducto">Imagen del producto:</label>
+        <input type="file" id="imagenProducto" name="imagen">
+
+        <br><br>
+        <label for="proveedorProducto">Proveedor:</label>
+        <input type="text" id="proveedorProducto" name="proveedor">
+        
+        <button type="submit">Agregar Producto</button>
+        <a href="index.html">Menu principal</a>
+    </form>
+
+    <script>
+            /*  const URL = "http://127.0.0.1:5000" */
+        const URL = "franco97.mysql.pythonanywhere-services.com" 
+
+        
+
+       
+        document.getElementById('formulario').addEventListener('submit', function (event) {
+            event.preventDefault(); 
+
+            var formData = new FormData();
+            formData.append('id', document.getElementById('id').value);
+            formData.append('descripcion', document.getElementById('descripcion').value);
+            formData.append('cantidad', document.getElementById('cantidad').value);
+            formData.append('precio', document.getElementById('precio').value);
+            formData.append('imagen', document.getElementById('imagenProducto').files[0]);
+            formData.append('proveedor', document.getElementById('proveedorProducto').value);
+            
+            fetch(URL + 'productos', {
+                method: 'POST',
+                body: formData 
+            })
+
+               
+                .then(function (response) {
+                    if (response.ok) { 
+                        return response.json(); 
+                    } else {
+                       
+                        throw new Error('Error al agregar el producto.');
+                    }
+                })
+
+              
+                .then(function (data) {
+                    alert('Producto agregado correctamente.');
+                })
+
+                .catch(function (error) {
+                    alert('Error al agregar el producto.');
+                })
+
+                .finally(function () {
+                    document.getElementById('id').value = "";
+                    document.getElementById('descripcion').value = "";
+                    document.getElementById('cantidad').value = "";
+                    document.getElementById('precio').value = "";
+                    document.getElementById('imagenProducto').value = "";
+                    document.getElementById('proveedorProducto').value = "";
+                });
+        })
+    </script>
+</body>
+
+</html>
